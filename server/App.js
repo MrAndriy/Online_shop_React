@@ -4,15 +4,22 @@ const mongoose = require('mongoose');
 const router = require('./routes/index');
 const fileUpload = require('express-fileupload');
 const path = require('path');
+const cors = require('cors');
+
+const errorHandler = require('./middleware/ErrorHandlingMiddleware');
+
+const PORT = config.get('port') || 3003;
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 app.use(express.static(path.resolve(__dirname, 'static')));
 app.use(fileUpload({}));
 app.use('/api', router);
 app.use('/api/auth', require('./routes/auth.routes'));
 
-const PORT = config.get('port') || 3003;
+// errors, last MiddleWare
+app.use(errorHandler);
 
 const start = async () => {
 	try {

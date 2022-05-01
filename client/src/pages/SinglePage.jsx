@@ -8,10 +8,10 @@ const SinglePage = () => {
 	const [product, setProduct] = useState(null);
 
 	const goBack = () => navigate(-1);
-	const goHome = () => navigate('/', { replace: true });
+	// const goHome = () => navigate('/', { replace: true });
 
 	useEffect(() => {
-		axios.get(`http://localhost:3001/products/${id}`).then(({ data }) => {
+		axios.get(`http://localhost:3002/api/products/${id}`).then(({ data }) => {
 			setProduct(data);
 		});
 	}, [id]);
@@ -21,7 +21,10 @@ const SinglePage = () => {
 				<>
 					<h1>{product.title}</h1>
 					<p>{product.description}</p>
-					<img src={product.additionalImages} alt={product.title} />
+					<img
+						src={`http://localhost:3002/${product.image}`}
+						alt={product.title}
+					/>
 					<button> buy {product.price}</button>
 					<button onClick={goBack}>go back</button>
 				</>
