@@ -1,0 +1,5 @@
+{
+	"port": 3002,
+	"jwtSecret": "secret key",
+	"mongoUrl": "mongodb+srv://root:root@cluster0.eucj7.mongodb.net/app?retryWrites=true&w=majority"
+}
