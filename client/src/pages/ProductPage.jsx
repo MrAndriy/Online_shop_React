@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const SinglePage = () => {
+const ProductPage = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const [product, setProduct] = useState(null);
@@ -33,4 +33,4 @@ const SinglePage = () => {
 	);
 };
 
-export default SinglePage;
+export default ProductPage;
