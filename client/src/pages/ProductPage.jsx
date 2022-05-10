@@ -1,6 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { fetchOneDevice } from '../http/productAPI';
+import { Card, Button } from 'react-bootstrap';
+import { BiShoppingBag } from 'react-icons/bi';
 
 const ProductPage = () => {
 	const { id } = useParams();
@@ -11,23 +13,36 @@ const ProductPage = () => {
 	// const goHome = () => navigate('/', { replace: true });
 
 	useEffect(() => {
-		axios.get(`http://localhost:3002/api/products/${id}`).then(({ data }) => {
-			setProduct(data);
-		});
+		fetchOneDevice(id).then((data) => setProduct(data));
 	}, [id]);
+
 	return (
 		<div>
 			{product && (
-				<>
-					<h1>{product.title}</h1>
-					<p>{product.description}</p>
-					<img
-						src={`http://localhost:3002/${product.image}`}
+				<Card>
+					<Card.Header className='text-center'>{product.title}</Card.Header>
+					<Card.Img
+						className='w-25 p-3 align-self-center'
+						variant='top'
+						src={`${process.env.REACT_APP_API_URL}${product.image}`}
 						alt={product.title}
 					/>
-					<button> buy {product.price}</button>
-					<button onClick={goBack}>go back</button>
-				</>
+					<Card.Body>
+						<Card.Text>{product.description}</Card.Text>
+						<Card.Text> Ціна {product.price} UAH</Card.Text>
+					</Card.Body>
+					<Card.Footer className='d-flex justify-content-between'>
+						<Button onClick={goBack} variant='outline-secondary'>
+							Назад
+						</Button>
+						<BiShoppingBag
+							style={{
+								width: '25px',
+								height: '100%',
+							}}
+						/>
+					</Card.Footer>
+				</Card>
 			)}
 		</div>
 	);

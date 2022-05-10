@@ -5,7 +5,7 @@ import { PRODUCTS_ROUTE } from '../../utils/consts';
 
 const Slides = ({ products }) => {
 	const navigate = useNavigate();
-	const interval = 10000;
+	const interval = 3000;
 	return (
 		<div className='carousel-offers'>
 			<Carousel variant='dark'>
