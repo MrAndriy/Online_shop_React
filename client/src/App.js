@@ -1,4 +1,3 @@
-import './App.scss';
 import { Route, Routes } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
@@ -25,10 +24,17 @@ import {
 import { useContext, useEffect, useState } from 'react';
 import { Context } from '.';
 import { check } from './http/userAPI';
+import { fetchDevices } from './http/productAPI';
 
 const App = observer(() => {
-	const { user } = useContext(Context);
+	const { user, products } = useContext(Context);
 	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		fetchDevices().then((data) => {
+			products.setProducts(data);
+		});
+	}, []);
 
 	useEffect(() => {
 		if (!localStorage.getItem('token')) {

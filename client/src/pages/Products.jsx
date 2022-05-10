@@ -1,36 +1,63 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { useContext } from 'react';
+import { Context } from '../index';
+import { Row, Col, Card, Spinner } from 'react-bootstrap';
+import { BiShoppingBag } from 'react-icons/bi';
+import { useNavigate } from 'react-router-dom';
+import { PRODUCTS_ROUTE } from '../utils/consts';
 
 const Products = () => {
-	const [products, setProducts] = useState([]);
-	console.log(products);
-	useEffect(() => {
-		axios.get('http://localhost:3002/api/products').then(({ data }) => {
-			setProducts(data);
-		});
-	}, []);
+	const navigate = useNavigate();
+	const { products } = useContext(Context);
 
-	return (
-		<div>
-			{products.length ? (
-				products.map((item) => (
-					<div className='products__item' key={item._id}>
-						<img src={`http://localhost:3002/${item.image}`} alt={item.title} />
-						<div className='products__items-wraper'>
-							<h2>{item.title}</h2>
-							<p>{item.description}</p>
-							<button>
-								<Link to={`/products/${item._id}`}>More</Link>
-							</button>
-							<button className='buy'>Buy {item.price}</button>
-						</div>
-					</div>
-				))
-			) : (
-				<h1>loading data</h1>
-			)}
-		</div>
+	return !!products.products.length ? (
+		<Row xs={2} md={4} className='g-4'>
+			{products.products.map((product) => (
+				<Col key={product._id}>
+					<Card
+						onClick={() => navigate(`${PRODUCTS_ROUTE}/${product._id}`)}
+						style={{ maxHeight: 450, cursor: 'pointer' }}
+					>
+						<Card.Img
+							variant='top'
+							src={`${process.env.REACT_APP_API_URL}${product.image}`}
+						/>
+						<Card.Body>
+							<Card.Title
+								style={{
+									overflow: 'hidden',
+									whiteSpace: 'nowrap',
+									textOverflow: 'ellipsis',
+								}}
+							>
+								{product.title}
+							</Card.Title>
+							<Card.Text
+								style={{
+									overflow: 'hidden',
+									whiteSpace: 'nowrap',
+									textOverflow: 'ellipsis',
+								}}
+							>
+								{product.description}
+							</Card.Text>
+						</Card.Body>
+						<Card.Footer
+							style={{ display: 'flex', justifyContent: 'space-between' }}
+						>
+							<p>ціна {product.price} UAH</p>
+							<BiShoppingBag
+								style={{
+									width: '25px',
+									height: '100%',
+								}}
+							/>
+						</Card.Footer>
+					</Card>
+				</Col>
+			))}
+		</Row>
+	) : (
+		<Spinner animation='border' role='status' />
 	);
 };
 
