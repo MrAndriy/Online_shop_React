@@ -5,4 +5,5 @@ export const PRODUCTS_ROUTE = '/products';
 export const PRODUCT_PAGE_ROUTE = '/products/:id';
 export const ADMIN_ROUTE = '/admin';
 export const BASKET_ROUTE = '/basket';
-export const CONTACTS_ROUTE = '/contacts'
+export const CONTACTS_ROUTE = '/contacts';
+export const EDIT_PAGE_ROUTE = '/products/:id/edit';
