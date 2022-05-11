@@ -1,13 +1,19 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import './Layout.scss';
-import { CONTACTS_ROUTE, PRODUCTS_ROUTE, HOME_ROUTE } from '../../utils/consts';
+import {
+	CONTACTS_ROUTE,
+	PRODUCTS_ROUTE,
+	HOME_ROUTE,
+	ADMIN_ROUTE,
+} from '../../utils/consts';
 import { useContext } from 'react';
 import { Context } from '../..';
 import AuthStatus from '../AuthStatus';
 
 const Layout = observer(() => {
 	const { user } = useContext(Context);
+	
 	return (
 		<div className='online__store'>
 			<header className='navbar'>
@@ -15,6 +21,7 @@ const Layout = observer(() => {
 					<NavLink to={HOME_ROUTE}>Home</NavLink>
 					<NavLink to={PRODUCTS_ROUTE}>Products</NavLink>
 					<NavLink to={CONTACTS_ROUTE}>Contacts</NavLink>
+					{user.isAdmin && <NavLink to={ADMIN_ROUTE}>Admin panel</NavLink>}
 				</nav>
 				<nav className='navbar__login'>
 					{user.isAuth ? (

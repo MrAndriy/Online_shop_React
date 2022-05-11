@@ -13,8 +13,10 @@ import { Layout } from './components/index';
 import { Spinner } from 'react-bootstrap';
 //routes
 import {
+	ADMIN_ROUTE,
 	BASKET_ROUTE,
 	CONTACTS_ROUTE,
+	EDIT_PAGE_ROUTE,
 	HOME_ROUTE,
 	LOGIN_ROUTE,
 	PRODUCTS_ROUTE,
@@ -25,6 +27,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Context } from '.';
 import { check } from './http/userAPI';
 import { fetchDevices } from './http/productAPI';
+import AdminPage from './pages/AdminPage';
 
 const App = observer(() => {
 	const { user, products } = useContext(Context);
@@ -63,6 +66,7 @@ const App = observer(() => {
 				<Route path={LOGIN_ROUTE} element={<Auth />} />
 				<Route path={REGISTRATION_ROUTE} element={<Auth />} />
 				<Route path={BASKET_ROUTE} element={<div>Basket</div>} />
+				<Route path={ADMIN_ROUTE} element={<AdminPage />} />
 				<Route
 					path='*'
 					element={

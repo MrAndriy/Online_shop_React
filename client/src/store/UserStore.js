@@ -15,6 +15,14 @@ export default class UserStore {
 		return this._user;
 	}
 
+	get isAdmin() {
+		return this._user != null
+			? this._user.role === 'ADMIN'
+				? true
+				: false
+			: false;
+	}
+
 	setIsAuth(bool) {
 		this._isAuth = bool;
 	}

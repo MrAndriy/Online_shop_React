@@ -26,19 +26,18 @@ class ProductController {
 	}
 
 	async getAll(req, res) {
-		//need to check pagination in mongoDB
-		// let { limit, page } = req.query;
-		// page = page || 1;
-		// limit = limit || 4;
-		// let offset = page * limit - limit;
-		// let product = await Product.find(
-		// 	// {
-		// 	// limit,
-		// 	// offset,
-		// 	// }
-		// );
-		let product = await Product.find();
-		return res.json(product);
+		const { title } = req.query;
+		const condition = title
+			? { title: { $regex: new RegExp(title), $options: 'i' } }
+			: {};
+		Product.find(condition)
+			.then((data) => res.send(data))
+			.catch((e) => {
+				res.status(500).send({
+					message:
+						err.message || 'Some error occured while retrieving products.',
+				});
+			});
 	}
 
 	async getOne(req, res) {
@@ -92,6 +91,21 @@ class ProductController {
 			.catch((err) => {
 				res.status(500).send({
 					message: 'Could not delete Product with id=' + id,
+				});
+			});
+	}
+
+	async deleteAll(req, res) {
+		Product.deleteMany({})
+			.then((data) => {
+				res.send({
+					message: `${data.deletedCount} Products were deleted successfuly`,
+				});
+			})
+			.catch((e) => {
+				res.status(500).send({
+					message:
+						err.message || 'Some error occurred while removing all tutorials.',
 				});
 			});
 	}

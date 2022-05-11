@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.static(path.resolve(__dirname, 'static')));
 app.use(fileUpload({}));
 app.use('/api', router);
-app.use('/api/auth', require('./routes/auth.routes'));
+// app.use('/api/auth', require('./routes/auth.routes'));
 
 // errors, last MiddleWare
 app.use(errorHandler);

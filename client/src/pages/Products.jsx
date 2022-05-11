@@ -12,9 +12,9 @@ const Products = () => {
 	return !!products.products.length ? (
 		<Row xs={2} md={4} className='g-4'>
 			{products.products.map((product) => (
-				<Col key={product._id}>
+				<Col key={product.id}>
 					<Card
-						onClick={() => navigate(`${PRODUCTS_ROUTE}/${product._id}`)}
+						onClick={() => navigate(`${PRODUCTS_ROUTE}/${product.id}`)}
 						style={{ maxHeight: 450, cursor: 'pointer' }}
 					>
 						<Card.Img

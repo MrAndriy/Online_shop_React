@@ -31,8 +31,8 @@ const Slides = ({ products }) => {
 				</Carousel.Item>
 				{products.map((item) => (
 					<Carousel.Item
-						onClick={() => navigate(`${PRODUCTS_ROUTE}/${item._id}`)}
-						key={item._id}
+						onClick={() => navigate(`${PRODUCTS_ROUTE}/${item.id}`)}
+						key={item.id}
 						interval={interval}
 						style={{ cursor: 'pointer', maxHeight: 500, marginBottom: 50 }}
 					>
