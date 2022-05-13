@@ -1,6 +1,5 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { BASKET_ROUTE, HOME_ROUTE, LOGIN_ROUTE } from '../utils/consts';
-import { BiShoppingBag } from 'react-icons/bi';
 import { MdLogout } from 'react-icons/md';
 
 const AuthStatus = ({ user }) => {
@@ -34,11 +33,6 @@ const AuthStatus = ({ user }) => {
 				alignSelf: 'center',
 			}}
 		>
-			<BiShoppingBag
-				onClick={() => navigate(BASKET_ROUTE)}
-				style={{ width: '25px', height: '100%' }}
-			/>
-
 			<p>
 				Welcome {user.user.email}!{' '}
 				<MdLogout
