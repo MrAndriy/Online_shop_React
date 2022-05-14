@@ -1,23 +1,28 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Context } from '../index';
 import { Row, Col, Card, Spinner } from 'react-bootstrap';
 import { BiShoppingBag } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import { PRODUCTS_ROUTE } from '../utils/consts';
+import productsService from '../services/products.service';
+import { observer } from 'mobx-react-lite';
 
-const Products = () => {
+const Products = observer(() => {
 	const navigate = useNavigate();
-	const { products } = useContext(Context);
+	const { user, products, cart } = useContext(Context);
+
+	useEffect(() => {
+		productsService.getAll().then(({ data }) => products.setProducts(data));
+	}, []);
 
 	return !!products.products.length ? (
 		<Row xs={2} md={4} className='g-4'>
 			{products.products.map((product) => (
 				<Col key={product.id}>
-					<Card
-						onClick={() => navigate(`${PRODUCTS_ROUTE}/${product.id}`)}
-						style={{ maxHeight: 450, cursor: 'pointer' }}
-					>
+					<Card style={{ maxHeight: 450 }}>
 						<Card.Img
+							style={{ cursor: 'pointer' }}
+							onClick={() => navigate(`${PRODUCTS_ROUTE}/${product.id}`)}
 							variant='top'
 							src={`${process.env.REACT_APP_API_URL}${product.image}`}
 						/>
@@ -46,6 +51,7 @@ const Products = () => {
 						>
 							<p>ціна {product.price} UAH</p>
 							<BiShoppingBag
+								onClick={() => cart.addToBasket(product)}
 								style={{
 									width: '25px',
 									height: '100%',
@@ -59,6 +65,6 @@ const Products = () => {
 	) : (
 		<Spinner animation='border' role='status' />
 	);
-};
+});
 
 export default Products;

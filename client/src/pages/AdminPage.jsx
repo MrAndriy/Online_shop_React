@@ -4,11 +4,12 @@ import CreateProduct from '../components/modals/CreateProduct';
 import EditProduct from '../components/modals/EditProduct';
 import productsService from '../services/products.service';
 import { Button } from 'react-bootstrap';
+import { observer } from 'mobx-react-lite';
 
-const AdminPage = () => {
+const AdminPage = observer(() => {
 	const [products, setProducts] = useState([]);
 	const [currentProduct, setCurrentProduct] = useState(null);
-	const [currentIndex, setCurrentIndex] = useState(-1);
+	const [currentId, setCurrentId] = useState(-1);
 	const [inputSearch, setInputSearch] = useState('');
 	const [productModalVisible, setProductModalVisible] = useState(false);
 	const [editProductModalVisible, setEditProductModalVisible] = useState(false);
@@ -18,7 +19,7 @@ const AdminPage = () => {
 		setInputSearch(searchTitle);
 	};
 
-	const retrieveTutorials = () => {
+	const retrieveProducts = () => {
 		productsService
 			.getAll()
 			.then((response) => {
@@ -30,17 +31,17 @@ const AdminPage = () => {
 	};
 
 	const refreshList = () => {
-		retrieveTutorials();
+		retrieveProducts();
 		setCurrentProduct(null);
-		setCurrentIndex(-1);
+		setCurrentId(-1);
 	};
 
-	const setActiveTutorial = (tutorial, index) => {
-		setCurrentProduct(tutorial);
-		setCurrentIndex(index);
+	const setActiveProduct = (product, id) => {
+		setCurrentProduct(product);
+		setCurrentId(id);
 	};
 
-	const removeAllTutorials = () => {
+	const removeAllProducts = () => {
 		productsService
 			.deleteAll()
 			.then((response) => {
@@ -96,13 +97,14 @@ const AdminPage = () => {
 				<h4>Products List</h4>
 				<ul className='list-group'>
 					{products &&
-						products.map((product, index) => (
+						products.map((product) => (
 							<li
 								className={
-									'list-group-item ' + (index === currentIndex ? 'active' : '')
+									'list-group-item ' +
+									(product.id === currentId ? 'active' : '')
 								}
-								onClick={() => setActiveTutorial(product, index)}
-								key={index}
+								onClick={() => setActiveProduct(product, product.id)}
+								key={product.id}
 							>
 								{product.title}
 							</li>
@@ -110,7 +112,7 @@ const AdminPage = () => {
 				</ul>
 				<button
 					className='m-3 btn btn-sm btn-danger'
-					onClick={removeAllTutorials}
+					onClick={removeAllProducts}
 				>
 					Remove All
 				</button>
@@ -157,7 +159,7 @@ const AdminPage = () => {
 							refreshList={refreshList}
 							show={editProductModalVisible}
 							onHide={() => setEditProductModalVisible(false)}
-							product={currentProduct}
+							id={currentId}
 						/>
 					</div>
 				) : (
@@ -174,6 +176,6 @@ const AdminPage = () => {
 			/>
 		</div>
 	);
-};
+});
 
 export default AdminPage;

@@ -26,6 +26,16 @@
 			text-decoration: none;
 		}
 	}
+
+	&__navigate {
+		display: flex;
+		flex-direction: row;
+
+		&__shop {
+			margin-left: 15px;
+			justify-content: center;
+		}
+	}
 }
 
 .container {
