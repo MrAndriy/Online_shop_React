@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import CreateProduct from '../components/modals/CreateProduct';
 import EditProduct from '../components/modals/EditProduct';
 import productsService from '../services/products.service';

@@ -1,19 +1,20 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { fetchOneDevice } from '../http/productAPI';
+import { useState, useEffect, useContext } from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { BiShoppingBag } from 'react-icons/bi';
+import { Context } from '../index';
+import productsService from '../services/products.service';
 
 const ProductPage = () => {
+	const { cart } = useContext(Context);
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const [product, setProduct] = useState(null);
 
 	const goBack = () => navigate(-1);
-	// const goHome = () => navigate('/', { replace: true });
 
 	useEffect(() => {
-		fetchOneDevice(id).then((data) => setProduct(data));
+		productsService.get(id).then(({ data }) => setProduct(data));
 	}, [id]);
 
 	return (
@@ -23,11 +24,10 @@ const ProductPage = () => {
 					<Card.Header className='text-center'>{product.title}</Card.Header>
 					<Card.Img
 						className='w-25 p-3 align-self-center'
-						variant='top'
 						src={`${process.env.REACT_APP_API_URL}${product.image}`}
 						alt={product.title}
 					/>
-					<Card.Body>
+					<Card.Body style={{ maxHeight: '250px' }}>
 						<Card.Text>{product.description}</Card.Text>
 						<Card.Text> Ціна {product.price} UAH</Card.Text>
 					</Card.Body>
@@ -40,6 +40,7 @@ const ProductPage = () => {
 								width: '25px',
 								height: '100%',
 							}}
+							onClick={() => cart.addToBasket(product)}
 						/>
 					</Card.Footer>
 				</Card>

@@ -19,11 +19,10 @@ const Products = observer(() => {
 		<Row xs={2} md={4} className='g-4'>
 			{products.products.map((product) => (
 				<Col key={product.id}>
-					<Card style={{ maxHeight: 450 }}>
+					<Card style={{ height: 450 }}>
 						<Card.Img
-							style={{ cursor: 'pointer' }}
+							style={{ cursor: 'pointer', height: '200px', padding: '15px' }}
 							onClick={() => navigate(`${PRODUCTS_ROUTE}/${product.id}`)}
-							variant='top'
 							src={`${process.env.REACT_APP_API_URL}${product.image}`}
 						/>
 						<Card.Body>
@@ -38,9 +37,7 @@ const Products = observer(() => {
 							</Card.Title>
 							<Card.Text
 								style={{
-									overflow: 'hidden',
-									whiteSpace: 'nowrap',
-									textOverflow: 'ellipsis',
+									height: '100px',
 								}}
 							>
 								{product.description}
