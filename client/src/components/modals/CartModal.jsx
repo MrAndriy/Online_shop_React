@@ -3,37 +3,47 @@ import { Modal, Form, Row, Col, Button } from 'react-bootstrap';
 import { Context } from '../../index';
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { TiDeleteOutline } from 'react-icons/ti';
+import basketService from '../../services/basket.service';
+import { storage } from '../../store/BasketStore';
 
 const CartModal = ({ show, onHide }) => {
 	const { user, cart } = useContext(Context);
+	const [name, setName] = useState('');
+	const [email, setEmail] = useState('');
 
 	let prices = 0;
 	cart.items.map((price) => (prices += Number(price.total)));
 
-	const [name, setName] = useState('');
-	const [email, setEmail] = useState('');
-
-	const sendOrder = () => {
-		let userId;
-		let nameId;
-		if (user.user !== null) {
-			userId = user.user.id;
-			nameId = user.user;
-		} else {
-			userId = email;
-			nameId = name;
-		}
-
-		let order = {
-			[userId]: cart.items,
-			name: nameId,
-		};
+	const clearCart = () => {
 		setName('');
 		setEmail('');
 		cart.clearItems();
 		onHide(true);
-		console.log(order);
 	};
+
+	const sendOrder = () => {
+		const userId = user.user !== null ? user.user.id : 'unathorizated';
+		const userName = user.user !== null ? user.user.email : name;
+		const userEmail = user.user !== null ? user.user.email : email;
+
+		const formData = {
+			customer: {
+				userId: userId,
+				name: userName,
+				email: userEmail,
+			},
+			cartItems: cart.items,
+		};
+
+		basketService
+			.makeOrder(formData)
+			.then(({ data }) => {
+				clearCart();
+				alert(`Your order #${data._id} confirmed`);
+			})
+			.catch((e) => console.log(e));
+	};
+
 	return (
 		<Modal show={show} onHide={onHide} size='lg'>
 			<Modal.Header closeButton>

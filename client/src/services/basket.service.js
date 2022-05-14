@@ -1,13 +1,13 @@
 import { $authHost, $host } from '../http';
 
 class BasketDataService {
-	async addToBasket(id) {
-		const { responce } = await $authHost.post('api/basket', id);
+	async makeOrder(order) {
+		const responce = await $host.post('api/orders', order);
 		return responce;
 	}
 
-	async getBasket() {
-		const { data } = await $authHost.get('api/basket');
+	async getOrders() {
+		const { data } = await $authHost.get('api/orders');
 		return data;
 	}
 }
