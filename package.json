@@ -1,0 +1,31 @@
+{
+	"name": "online_shop_react",
+	"version": "1.0.0",
+	"description": "Pet project",
+	"main": "index.js",
+	"scripts": {
+		"start": "",
+		"server": "npm run dev --prefix server",
+		"client": "npm run start --prefix client",
+		"client:install": "npm install --prefix client",
+		"server:install": "npm install --prefix server",
+		"client:build": "npm run build --prefix client",
+		"dev": "concurrently \"npm run server\" \"npm run client\""
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/MrAndriy/Online_shop_React.git"
+	},
+	"keywords": [
+		"MERN"
+	],
+	"author": "Mriy Andriy",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/MrAndriy/Online_shop_React/issues"
+	},
+	"homepage": "https://github.com/MrAndriy/Online_shop_React#readme",
+	"devDependencies": {
+		"concurrently": "^7.2.0"
+	}
+}

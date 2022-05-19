@@ -1,15 +1,20 @@
-import React, { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Modal, Form, Row, Col, Button } from 'react-bootstrap';
-import { Context } from '../../index';
+import { Context } from '../../App';
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { TiDeleteOutline } from 'react-icons/ti';
 import basketService from '../../services/basket.service';
 import { storage } from '../../store/BasketStore';
 
-const CartModal = ({ show, onHide }) => {
-	const { user, cart } = useContext(Context);
+const CartModal = ({ show, onHide, user }) => {
+	const { cart } = useContext(Context);
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
+
+	useEffect(() => {
+		// basketService.getBasket().then((data) => products.setBaskets(data));
+		cart.setItems(storage.getCart());
+	}, [cart]);
 
 	let prices = 0;
 	cart.items.map((price) => (prices += Number(price.total)));
@@ -22,26 +27,34 @@ const CartModal = ({ show, onHide }) => {
 	};
 
 	const sendOrder = () => {
-		const userId = user.user !== null ? user.user.id : 'unathorizated';
-		const userName = user.user !== null ? user.user.email : name;
-		const userEmail = user.user !== null ? user.user.email : email;
+		const userId = 'unathorizated';
+		const userName = name;
+		const userEmail = email;
 
 		const formData = {
-			customer: {
-				userId: userId,
-				name: userName,
-				email: userEmail,
-			},
 			cartItems: cart.items,
 		};
-
-		basketService
-			.makeOrder(formData)
-			.then(({ data }) => {
-				clearCart();
-				alert(`Your order #${data._id} confirmed`);
-			})
-			.catch((e) => console.log(e));
+		if (user === null) {
+			formData.customer = {
+				name: userName,
+				email: userEmail,
+			};
+			basketService
+				.makeOrderNotAuth(formData)
+				.then(({ data }) => {
+					clearCart();
+					alert(`Your order #${data._id} confirmed`);
+				})
+				.catch((e) => console.log(e));
+		} else {
+			basketService
+				.makeOrderAuth(formData)
+				.then(({ data }) => {
+					clearCart();
+					alert(`Your order #${data._id} confirmed`);
+				})
+				.catch((e) => console.log(e));
+		}
 	};
 
 	return (
@@ -62,6 +75,7 @@ const CartModal = ({ show, onHide }) => {
 							<img
 								src={process.env.REACT_APP_API_URL + product.image}
 								width={50}
+								alt={product.title}
 							/>
 							<div className='col-5'>
 								<h5>{product.title}</h5>
@@ -83,7 +97,8 @@ const CartModal = ({ show, onHide }) => {
 					</div>
 				))}
 				<h2>Total {prices} UAH</h2>
-				{user.user === null ? (
+
+				{user === null && (
 					<>
 						<hr />
 						<Form.Group as={Row} className='mb-3'>
@@ -111,8 +126,6 @@ const CartModal = ({ show, onHide }) => {
 							</Col>
 						</Form.Group>
 					</>
-				) : (
-					<div></div>
 				)}
 			</Modal.Body>
 			<Modal.Footer>

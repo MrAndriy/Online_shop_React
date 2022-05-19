@@ -11,7 +11,7 @@ const Basket = observer(() => {
 	const { products, cart } = useContext(Context);
 
 	useEffect(() => {
-		// basketService.getBasket().then((data) => products.setBaskets(data));
+		// basketService.getBasket().then((data) => products.setBaskets(data)); //?
 		cart.setItems(storage.getCart());
 	}, []);
 

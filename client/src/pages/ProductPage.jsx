@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { BiShoppingBag } from 'react-icons/bi';
-import { Context } from '../index';
+import { Context } from '../App';
 import productsService from '../services/products.service';
 
 const ProductPage = () => {

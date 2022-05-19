@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
-import { Context } from '../index';
+import { useContext, useEffect } from 'react';
+import { Context } from '../App';
 import { Row, Col, Card, Spinner } from 'react-bootstrap';
 import { BiShoppingBag } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
@@ -9,11 +9,11 @@ import { observer } from 'mobx-react-lite';
 
 const Products = observer(() => {
 	const navigate = useNavigate();
-	const { user, products, cart } = useContext(Context);
+	const { products, cart } = useContext(Context);
 
 	useEffect(() => {
 		productsService.getAll().then(({ data }) => products.setProducts(data));
-	}, []);
+	}, [products]);
 
 	return !!products.products.length ? (
 		<Row xs={2} md={4} className='g-4'>

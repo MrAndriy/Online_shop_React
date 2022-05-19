@@ -1,18 +1,19 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { BASKET_ROUTE, HOME_ROUTE, LOGIN_ROUTE } from '../utils/consts';
 import { MdLogout } from 'react-icons/md';
+import { useContext } from 'react';
+import { Context } from '../App';
 
 const AuthStatus = ({ user }) => {
+	const auth = useContext(Context);
 	let navigate = useNavigate();
 
 	const logOut = () => {
-		user.setUser(null);
-		user.setIsAuth(false);
-		localStorage.removeItem('token');
+		auth.logout();
 		navigate(HOME_ROUTE);
 	};
 
-	if (!user.user) {
+	if (!auth.isAuthenticated) {
 		return (
 			<div>
 				<p>
@@ -34,7 +35,7 @@ const AuthStatus = ({ user }) => {
 			}}
 		>
 			<p>
-				Welcome {user.user.email}!{' '}
+				Welcome {user.fullname}!
 				<MdLogout
 					onClick={() => logOut()}
 					style={{ width: '25px', height: '100%', cursor: 'pointer' }}

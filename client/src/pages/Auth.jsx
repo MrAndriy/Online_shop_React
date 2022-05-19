@@ -1,35 +1,49 @@
-import { useContext, useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate, useLocation, NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { Container, Card, Form, Row, Button } from 'react-bootstrap';
-import { Context } from '../index';
 import { HOME_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE } from '../utils/consts';
 import { login, registration } from '../http/userAPI';
+import { Context } from '../App';
+import { useToastContext } from '../hook/message.hook';
+import jwt_decode from 'jwt-decode';
 
 const Auth = observer(() => {
+	const initStateForm = {
+		email: '',
+		password: '',
+		fullname: '',
+	};
+
+	const auth = useContext(Context);
+	const [form, setForm] = useState(initStateForm);
 	const navigate = useNavigate();
 	const location = useLocation();
-	const fromPage = location.state?.from?.pathname || '/';
-
-	const { user } = useContext(Context);
+	const fromPage = location.state?.from?.pathname || '/'; // need if user not logining and redirect after login
 	const isLogin = location.pathname === LOGIN_ROUTE;
+	const addToast = useToastContext();
 
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
+	const changeHandler = (event) => {
+		setForm({ ...form, [event.target.name]: event.target.value });
+	};
 
 	const click = async () => {
 		try {
 			let data;
 			if (isLogin) {
-				data = login(email, password);
+				data = await login({ ...form });
+				auth.login(data);
+				let user = jwt_decode(data);
+				addToast(`Welcome ${user.fullname} to Stickerz Shop`);
 			} else {
-				data = await registration(email, password);
+				data = await registration({ ...form });
+				auth.login(data);
+				let user = jwt_decode(data);
+				addToast(`Registration is success ${user.fullname} in Stickerz Shop`);
 			}
-			user.setUser(data);
-			user.setIsAuth(true);
 			navigate(HOME_ROUTE);
 		} catch (e) {
-			alert(e.response.data.message);
+			addToast(e.response.data.message);
 		}
 	};
 
@@ -41,18 +55,29 @@ const Auth = observer(() => {
 			<Card style={{ width: 600 }} className='p-5'>
 				<h2 className='m-auto'>{isLogin ? 'Авторизація' : 'Реєстрація'}</h2>
 				<Form className='d-flex flex-column'>
+					{!isLogin && (
+						<Form.Control
+							className='mt-3'
+							placeholder='Введіть Імя та Прізвище'
+							value={form.fullname}
+							name='fullname'
+							onChange={changeHandler}
+						/>
+					)}
 					<Form.Control
 						className='mt-3'
 						placeholder='Введіть ваш email...'
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
+						value={form.email}
+						name='email'
+						onChange={changeHandler}
 					/>
 					<Form.Control
 						className='mt-3'
 						placeholder='Введіть ваш пароль...'
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
+						value={form.password}
 						type='password'
+						name='password'
+						onChange={changeHandler}
 					/>
 					<Row className='d-flex justify-content-between mt-3 pl-3 pr-3'>
 						{isLogin ? (
