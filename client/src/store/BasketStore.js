@@ -1,4 +1,5 @@
 import { makeAutoObservable } from 'mobx';
+import { useToastContext } from '../hook/message.hook';
 
 export default class Basket {
 	constructor() {
@@ -86,7 +87,7 @@ export default class Basket {
 	}
 
 	makeOrder() {
-		console.log('click')
+		console.log('click');
 	}
 }
 

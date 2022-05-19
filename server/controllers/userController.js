@@ -1,49 +1,88 @@
 const ApiError = require('../error/ApiError.js');
+const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const User = require('../models/User');
 
-const generateJwt = (id, email, role) => {
+const generateJwt = (id, email, role, fullname) => {
 	const sekret_Key = config.get('jwtSecret');
-	return jwt.sign({ id, email, role }, sekret_Key, {
-		expiresIn: '24h',
+	return jwt.sign({ id, email, role, fullname }, sekret_Key, {
+		expiresIn: '3h',
 	});
 };
 
 class UserController {
 	async registration(req, res, next) {
-		const { email, password, role } = req.body;
-		if (!email || !password) {
-			return next(ApiError.badRequest('Не коректний email або password'));
+		try {
+			const errors = validationResult(req);
+
+			if (!errors.isEmpty()) {
+				return res.status(400).json({
+					errors: errors.array(),
+					message: 'Not correct values while registration',
+				});
+			}
+			const { email, password, role, fullname } = req.body;
+			const candidateEmail = await User.findOne({
+				email: email,
+			});
+			const candidateFullName = await User.findOne({ fullname: fullname });
+			if (candidateEmail || candidateFullName) {
+				return next(
+					ApiError.badRequest(
+						`${candidateEmail ? 'Email' : 'Full Name'} is allready used`
+					)
+				);
+			}
+			const hashPassword = await bcrypt.hash(password, 12);
+			const user = await User.create({
+				email,
+				password: hashPassword,
+				fullname,
+			});
+			const token = generateJwt(user.id, user.email, user.role, user.fullname);
+			return res.json({ token });
+		} catch (e) {
+			console.log(e);
+			return res.status(500).json(ApiError.internal());
 		}
-		const candidate = await User.findOne({ email });
-		if (candidate) {
-			return next(ApiError.badRequest('Користувач з таким email уже існує'));
-		}
-		const hashPassword = await bcrypt.hash(password, 5);
-		const user = await User.create({ email, role, password: hashPassword });
-		// const basket = await Basket.create({userId: user.id})
-		const token = generateJwt(user.id, user.email, user.role);
-		return res.json({ token });
 	}
 
 	async login(req, res, next) {
-		const { email, password } = req.body;
-		const user = await User.findOne({ email });
-		if (!user) {
-			return next(ApiError.internal('Користувач не знайдений'));
+		try {
+			const errors = validationResult(req);
+
+			if (!errors.isEmpty()) {
+				return res.status(400).json({
+					errors: errors.array(),
+					message: 'Not correct values while logging in',
+				});
+			}
+
+			const { email, password } = req.body;
+			const user = await User.findOne({ email });
+			if (!user) {
+				return next(ApiError.NotFound('User not found'));
+			}
+			let comparePassword = bcrypt.compareSync(password, user.password);
+			if (!comparePassword) {
+				return next(ApiError.badRequest('Not correct password'));
+			}
+			const token = generateJwt(user.id, user.email, user.role, user.fullname);
+			return res.json({ token });
+		} catch (e) {
+			console.log(e);
 		}
-		let comparePassword = bcrypt.compareSync(password, user.password);
-		if (!comparePassword) {
-			return next(ApiError.internal('Вказаний невірний пароль'));
-		}
-		const token = generateJwt(user.id, user.email, user.role);
-		return res.json({ token });
 	}
 
 	async check(req, res, next) {
-		const token = generateJwt(req.user.id, req.user.email, req.user.role);
+		const token = generateJwt(
+			req.user.id,
+			req.user.email,
+			req.user.role,
+			req.user.fullname
+		);
 		return res.json({ token });
 	}
 }

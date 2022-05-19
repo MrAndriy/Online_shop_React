@@ -1,80 +1,50 @@
-import { Route, Routes } from 'react-router-dom';
-import { observer } from 'mobx-react-lite';
-
-//pages
-import Home from './pages/Home';
-import Contacts from './pages/Contacts';
-import Products from './pages/Products';
-import ProductPage from './pages/ProductPage';
-import Auth from './pages/Auth';
-
-//base layout
-import { Layout } from './components/index';
+import { createContext } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { useRoutes } from './routes/routes';
+import ProductStore from './store/ProductStore';
+import Basket from './store/BasketStore';
+import NavBar from './components/Navbar/Navbar';
+import { useAuth } from './hook/auth.hook';
+import { ToastContextProvider } from './context/ToasContext';
 import { Spinner } from 'react-bootstrap';
-//routes
-import {
-	ADMIN_ROUTE,
-	CONTACTS_ROUTE,
-	HOME_ROUTE,
-	LOGIN_ROUTE,
-	PRODUCTS_ROUTE,
-	PRODUCT_PAGE_ROUTE,
-	REGISTRATION_ROUTE,
-} from './utils/consts';
-import { useContext, useEffect, useState } from 'react';
-import { Context } from '.';
-import { check } from './http/userAPI';
-import AdminPage from './pages/AdminPage';
-import productsService from './services/products.service';
+import { isAdmin } from './hook/isAdmin.hook';
 
-const App = observer(() => {
-	const { user, products } = useContext(Context);
-	const [loading, setLoading] = useState(true);
+export const Context = createContext(null);
 
-	useEffect(() => {
-		// set product to context
-		productsService.getAll().then(({ data }) => {
-			products.setProducts(data);
-		});
+const App = () => {
+	const { token, login, logout, userId, ready } = useAuth();
+	const isAuthenticated = !!token;
+	const Admin = isAdmin(token);
+	const routes = useRoutes(isAuthenticated, Admin);
 
-		//check auth
-		if (!localStorage.getItem('token')) {
-			setLoading(false);
-		} else {
-			check()
-				.then((data) => {
-					user.setUser(data);
-					user.setIsAuth(true);
-				})
-				.finally(() => setLoading(false));
-		}
-	}, []);
-
-	if (loading) {
-		return <Spinner className='text-center' animation={'grow'} />;
+	if (!ready) {
+		return (
+			<Spinner animation='border' role='status'>
+				<span className='visually-hidden'>Loading...</span>
+			</Spinner>
+		);
 	}
 
 	return (
-		<Routes>
-			<Route element={<Layout />}>
-				<Route path={HOME_ROUTE} element={<Home />} />
-				<Route path={PRODUCTS_ROUTE} element={<Products />} />
-				<Route path={PRODUCT_PAGE_ROUTE} element={<ProductPage />} />
-				<Route path={CONTACTS_ROUTE} element={<Contacts />} />
-				<Route path={LOGIN_ROUTE} element={<Auth />} />
-				<Route path={REGISTRATION_ROUTE} element={<Auth />} />
-				<Route path={ADMIN_ROUTE} element={<AdminPage />} />
-				<Route
-					path='*'
-					element={
-						<main style={{ padding: '1rem' }}>
-							<p>There's nothing here! </p>
-						</main>
-					}
-				/>
-			</Route>
-		</Routes>
+		<Context.Provider
+			value={{
+				token,
+				login,
+				logout,
+				userId,
+				isAuthenticated,
+				cart: new Basket(),
+				products: new ProductStore(),
+			}}
+		>
+			<ToastContextProvider>
+				<BrowserRouter>
+					<NavBar isAuthenticated={isAuthenticated} />
+					<div className='container'>{routes}</div>;
+				</BrowserRouter>
+			</ToastContextProvider>
+		</Context.Provider>
 	);
-});
+};
 
 export default App;

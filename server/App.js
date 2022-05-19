@@ -8,7 +8,7 @@ const cors = require('cors');
 
 const errorHandler = require('./middleware/ErrorHandlingMiddleware');
 
-const PORT = config.get('port') || 3003;
+const PORT = config.get('port') || 3002;
 
 const app = express();
 app.use(express.json());
@@ -16,7 +16,6 @@ app.use(cors());
 app.use(express.static(path.resolve(__dirname, 'static')));
 app.use(fileUpload({}));
 app.use('/api', router);
-// app.use('/api/auth', require('./routes/auth.routes'));
 
 // errors, last MiddleWare
 app.use(errorHandler);
