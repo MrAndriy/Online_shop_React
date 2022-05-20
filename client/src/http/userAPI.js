@@ -18,3 +18,8 @@ export const check = async () => {
 	const { data } = await $authHost.get('api/user/auth');
 	return data.token;
 };
+
+export const findUser = async (id) => {
+	const { data } = await $authHost.get(`api/user/find/${id}`);
+	return data;
+};

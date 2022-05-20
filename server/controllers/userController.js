@@ -77,13 +77,33 @@ class UserController {
 	}
 
 	async check(req, res, next) {
-		const token = generateJwt(
-			req.user.id,
-			req.user.email,
-			req.user.role,
-			req.user.fullname
-		);
-		return res.json({ token });
+		try {
+			const token = generateJwt(
+				req.user.id,
+				req.user.email,
+				req.user.role,
+				req.user.fullname
+			);
+			return res.json({ token });
+		} catch (e) {
+			console.log(e);
+			return res.status(500).json(ApiError.internal());
+		}
+	}
+
+	async find(req, res, next) {
+		try {
+			const { id } = req.params;
+			const user = await User.findById(id);
+			if (!user) {
+				return next(ApiError.NotFound('User not found'));
+			}
+
+			res.json({ fullname: user.fullname, email: user.email, role: user.role });
+		} catch (e) {
+			console.log(e);
+			return res.status(500).json(ApiError.internal());
+		}
 	}
 }
 

@@ -5,6 +5,7 @@ const userController = require('../controllers/userController');
 //middleware
 const { check } = require('express-validator');
 const authMiddleware = require('../middleware/authMiddleware');
+const checkRole = require('../middleware/checkRoleMiddleware');
 
 router.post(
 	'/registration',
@@ -18,6 +19,7 @@ router.post(
 	],
 	userController.registration
 );
+
 router.post(
 	'/login',
 	[
@@ -29,6 +31,9 @@ router.post(
 	],
 	userController.login
 );
+
 router.get('/auth', authMiddleware, userController.check);
+
+router.get('/find/:id', authMiddleware, checkRole('ADMIN'), userController.find);
 
 module.exports = router;

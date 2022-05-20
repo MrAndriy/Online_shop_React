@@ -7,14 +7,14 @@ import NavBar from './components/Navbar/Navbar';
 import { useAuth } from './hook/auth.hook';
 import { ToastContextProvider } from './context/ToasContext';
 import { Spinner } from 'react-bootstrap';
-import { isAdmin } from './hook/isAdmin.hook';
+import { useIsAdmin } from './hook/isAdmin.hook';
 
 export const Context = createContext(null);
 
 const App = () => {
 	const { token, login, logout, userId, ready } = useAuth();
 	const isAuthenticated = !!token;
-	const Admin = isAdmin(token);
+	const Admin = useIsAdmin(token);
 	const routes = useRoutes(isAuthenticated, Admin);
 
 	if (!ready) {
