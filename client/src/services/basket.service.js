@@ -14,6 +14,14 @@ class BasketDataService {
 	async getOrders() {
 		return await $authHost.get('api/orders');
 	}
+
+	async getOneOrder(id) {
+		return await $authHost.get(`/api/orders/one/${id}`);
+	}
+
+	async getAllOreders() {
+		return await $authHost.get('/api/orders/all');
+	}
 }
 
 export default new BasketDataService();

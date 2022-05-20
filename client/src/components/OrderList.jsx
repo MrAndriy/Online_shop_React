@@ -1,18 +1,21 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Button, Table } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { ORDERS_PAGE_ROUTE } from '../utils/consts';
 
 export const OrderList = ({ orders }) => {
+	const navigate = useNavigate();
 	if (!orders.length) {
-		return <p className='center'>Not Orders</p>;
+		return <p className='center'>No Orders to show</p>;
 	}
 
 	return (
-		<table>
+		<Table striped bordered hover>
 			<thead>
 				<tr>
 					<th>№</th>
-					<th>Cart Items</th>
-					<th>Link</th>
+					<th>Order №</th>
+					<th>See more</th>
 				</tr>
 			</thead>
 
@@ -21,14 +24,21 @@ export const OrderList = ({ orders }) => {
 					return (
 						<tr key={order._id}>
 							<td>{index + 1}</td>
-							<td>{order.length}</td>
+							<td>{order._id}</td>
 							<td>
-								<Link to={`/one/${order._id}`}>Open</Link>
+								<Button
+									onClick={() =>
+										navigate(`${ORDERS_PAGE_ROUTE}/one/${order._id}`)
+									}
+									variant='outline-info'
+								>
+									Open
+								</Button>
 							</td>
 						</tr>
 					);
 				})}
 			</tbody>
-		</table>
+		</Table>
 	);
 };

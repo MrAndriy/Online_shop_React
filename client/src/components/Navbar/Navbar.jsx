@@ -5,6 +5,7 @@ import {
 	PRODUCTS_ROUTE,
 	HOME_ROUTE,
 	ADMIN_ROUTE,
+	ORDERS_PAGE_ROUTE,
 } from '../../utils/consts';
 import { useContext, useState } from 'react';
 import AuthStatus from '../AuthStatus';
@@ -26,6 +27,11 @@ const NavBar = observer(({ isAuthenticated }) => {
 				<NavLink to={HOME_ROUTE}>Home</NavLink>
 				<NavLink to={PRODUCTS_ROUTE}>Products</NavLink>
 				<NavLink to={CONTACTS_ROUTE}>Contacts</NavLink>
+				{isAuthenticated && (
+					<NavLink to={ORDERS_PAGE_ROUTE}>
+						{isAdmin ? 'Check orders' : 'My orders'}
+					</NavLink>
+				)}
 				{isAdmin && <NavLink to={ADMIN_ROUTE}>Admin panel</NavLink>}
 				{cart.items.length > 0 && (
 					<div className='navbar__navigate__shop'>

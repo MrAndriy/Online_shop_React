@@ -5,14 +5,15 @@ import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { TiDeleteOutline } from 'react-icons/ti';
 import basketService from '../../services/basket.service';
 import { storage } from '../../store/BasketStore';
+import { useToastContext } from '../../hook/message.hook';
 
 const CartModal = ({ show, onHide, user }) => {
 	const { cart } = useContext(Context);
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
+	const addToast = useToastContext();
 
 	useEffect(() => {
-		// basketService.getBasket().then((data) => products.setBaskets(data));
 		cart.setItems(storage.getCart());
 	}, [cart]);
 
@@ -27,7 +28,6 @@ const CartModal = ({ show, onHide, user }) => {
 	};
 
 	const sendOrder = () => {
-		const userId = 'unathorizated';
 		const userName = name;
 		const userEmail = email;
 
@@ -51,7 +51,7 @@ const CartModal = ({ show, onHide, user }) => {
 				.makeOrderAuth(formData)
 				.then(({ data }) => {
 					clearCart();
-					alert(`Your order #${data._id} confirmed`);
+					addToast(`Your order #${data._id} confirmed`);
 				})
 				.catch((e) => console.log(e));
 		}

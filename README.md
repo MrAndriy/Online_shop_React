@@ -10,6 +10,8 @@
 
 ### `npm run client:install`
 
+### `npm run server:install`
+
 # Builds the app for production to the `build` folder.
 
 ### `npm run client:build`
