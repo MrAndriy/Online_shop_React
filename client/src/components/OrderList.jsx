@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Table } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { ORDERS_PAGE_ROUTE } from '../utils/consts';
+import { ORDERS_PAGE_ROUTE } from '../consts/consts';
 
 export const OrderList = ({ orders }) => {
 	const navigate = useNavigate();

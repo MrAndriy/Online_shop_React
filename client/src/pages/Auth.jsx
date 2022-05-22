@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 import { useNavigate, useLocation, NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { Container, Card, Form, Row, Button } from 'react-bootstrap';
-import { HOME_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE } from '../utils/consts';
+import { HOME_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE } from '../consts/consts';
 import { login, registration } from '../http/userAPI';
 import { Context } from '../App';
 import { useToastContext } from '../hook/useToastContext';

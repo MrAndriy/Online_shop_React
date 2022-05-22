@@ -6,7 +6,7 @@ import {
 	HOME_ROUTE,
 	ADMIN_ROUTE,
 	ORDERS_PAGE_ROUTE,
-} from '../../utils/consts';
+} from '../../consts/consts';
 import { useContext, useState } from 'react';
 import AuthStatus from '../AuthStatus';
 import { BiShoppingBag } from 'react-icons/bi';

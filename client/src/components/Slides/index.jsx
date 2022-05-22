@@ -1,7 +1,7 @@
 import React from 'react';
 import { Carousel } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { PRODUCTS_ROUTE, slidesInterval } from '../../utils/consts';
+import { PRODUCTS_ROUTE, slidesInterval } from '../../consts/consts';
 
 const Slides = ({ products, homeSlides, isNavigated }) => {
 	const navigate = useNavigate();

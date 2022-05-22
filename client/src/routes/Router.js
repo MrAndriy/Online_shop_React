@@ -10,7 +10,7 @@ import {
 	REGISTRATION_ROUTE,
 	ADMIN_ROUTE,
 	ORDERS_PAGE_ROUTE,
-} from '../utils/consts';
+} from '../consts/consts';
 //pages
 import Auth from '../pages/Auth';
 import Home from '../pages/Home';

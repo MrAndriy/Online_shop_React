@@ -3,7 +3,7 @@ import { Context } from '../App';
 import { Row, Col, Card, Spinner } from 'react-bootstrap';
 import { BiShoppingBag } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
-import { PRODUCTS_ROUTE } from '../utils/consts';
+import { PRODUCTS_ROUTE } from '../consts/consts';
 import productsService from '../services/products.service';
 import { observer } from 'mobx-react-lite';
 
