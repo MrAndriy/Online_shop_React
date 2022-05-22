@@ -5,7 +5,7 @@ import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { TiDeleteOutline } from 'react-icons/ti';
 import basketService from '../../services/basket.service';
 import { storage } from '../../store/BasketStore';
-import { useToastContext } from '../../hook/message.hook';
+import { useToastContext } from '../../hook/useToastContext';
 
 const CartModal = ({ show, onHide, user }) => {
 	const { cart } = useContext(Context);

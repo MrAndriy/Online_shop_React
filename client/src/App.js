@@ -4,10 +4,10 @@ import { useRoutes } from './routes/routes';
 import ProductStore from './store/ProductStore';
 import Basket from './store/BasketStore';
 import NavBar from './components/Navbar/Navbar';
-import { useAuth } from './hook/auth.hook';
+import { useAuth } from './hook/useAuth';
 import { ToastContextProvider } from './context/ToasContext';
 import { Spinner } from 'react-bootstrap';
-import { useIsAdmin } from './hook/isAdmin.hook';
+import { useIsAdmin } from './hook/useIsAdmin';
 
 export const Context = createContext(null);
 

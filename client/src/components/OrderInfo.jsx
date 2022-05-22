@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Context } from '../App';
-import { useIsAdmin } from '../hook/isAdmin.hook';
+import { useIsAdmin } from '../hook/useIsAdmin';
 import { findUser } from '../http/userAPI';
 import basketService from '../services/basket.service';
 

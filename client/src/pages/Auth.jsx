@@ -5,7 +5,7 @@ import { Container, Card, Form, Row, Button } from 'react-bootstrap';
 import { HOME_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE } from '../utils/consts';
 import { login, registration } from '../http/userAPI';
 import { Context } from '../App';
-import { useToastContext } from '../hook/message.hook';
+import { useToastContext } from '../hook/useToastContext';
 import jwt_decode from 'jwt-decode';
 
 const Auth = observer(() => {

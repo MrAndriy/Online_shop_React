@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import basketService from '../services/basket.service';
 import { OrderList } from '../components/OrderList';
 import { Context } from '../App';
-import { useIsAdmin } from '../hook/isAdmin.hook';
+import { useIsAdmin } from '../hook/useIsAdmin';
 
 const OrdersPage = () => {
 	const [orders, setOrders] = useState([]);
