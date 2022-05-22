@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate, useLocation, NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { Container, Card, Form, Row, Button } from 'react-bootstrap';
@@ -50,7 +50,7 @@ const Auth = observer(() => {
 		return errors;
 	};
 
-	const click = async () => {
+	const authorization = async () => {
 		try {
 			let data;
 			setFormErrors(validate(form));
@@ -116,7 +116,7 @@ const Auth = observer(() => {
 								Є аккаунт? <NavLink to={LOGIN_ROUTE}>Уввійди!</NavLink>
 							</div>
 						)}
-						<Button variant={'outline-success'} onClick={click}>
+						<Button variant={'outline-success'} onClick={authorization}>
 							{isLogin ? 'Увійти' : 'Реєстрація'}
 						</Button>
 					</Row>
