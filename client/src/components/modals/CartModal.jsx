@@ -34,7 +34,7 @@ const CartModal = ({ show, onHide, user }) => {
 		const formData = {
 			cartItems: cart.items,
 		};
-		if (user === null) {
+		if (!user) {
 			formData.customer = {
 				name: userName,
 				email: userEmail,
