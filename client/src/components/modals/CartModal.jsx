@@ -9,16 +9,15 @@ import { useToastContext } from '../../hook/useToastContext';
 
 const CartModal = ({ show, onHide, user }) => {
 	const { cart } = useContext(Context);
+	const [prices, setPrices] = useState(0);
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const addToast = useToastContext();
 
 	useEffect(() => {
 		cart.setItems(storage.getCart());
+		cart.items.map((item) => setPrices(prices + Number(item.total)));
 	}, [cart]);
-
-	let prices = 0;
-	cart.items.map((price) => (prices += Number(price.total)));
 
 	const clearCart = () => {
 		setName('');
