@@ -44,7 +44,6 @@ class UserController {
 			const token = generateJwt(user.id, user.email, user.role, user.fullname);
 			return res.json({ token });
 		} catch (e) {
-			console.log(e);
 			return res.status(500).json(ApiError.internal());
 		}
 	}
@@ -72,7 +71,7 @@ class UserController {
 			const token = generateJwt(user.id, user.email, user.role, user.fullname);
 			return res.json({ token });
 		} catch (e) {
-			console.log(e);
+			return res.status(500).json(ApiError.internal());
 		}
 	}
 
@@ -86,7 +85,6 @@ class UserController {
 			);
 			return res.json({ token });
 		} catch (e) {
-			console.log(e);
 			return res.status(500).json(ApiError.internal());
 		}
 	}
@@ -101,7 +99,6 @@ class UserController {
 
 			res.json({ fullname: user.fullname, email: user.email, role: user.role });
 		} catch (e) {
-			console.log(e);
 			return res.status(500).json(ApiError.internal());
 		}
 	}

@@ -8,35 +8,26 @@ const EditProduct = ({ show, onHide, id, refreshList }) => {
 	useEffect(() => {
 		productsService.get(id).then(({ data }) => setProd(data));
 	}, [id]);
-	const [file, setFile] = useState(null);
+	const [file, setFile] = useState(null); // img change ?
 
 	const selectFile = (e) => {
 		setFile(e.target.files[0]);
 	};
 
-	const addProduct = () => {
-		// if (!!file) {
-		// 	setProd((prod) => ({
-		// 		...prod,
-		// 		'image': file,
-		// 	}));
-		// }
-		productsService.update(prod.id, prod).then((data) => {
+	const updProduct = async () => {
+		try {
+			await productsService.update(prod.id, prod);
 			onHide();
 			refreshList();
-		});
+		} catch (error) {}
 	};
 
-	const deleteProduct = () => {
-		productsService
-			.delete(prod.id)
-			.then(({ data }) => {
-				console.log(data);
-			})
-			.catch((e) => console.log(e));
-
-		onHide();
-		refreshList();
+	const deleteProduct = async () => {
+		try {
+			await productsService.delete(prod.id);
+			onHide();
+			refreshList();
+		} catch (error) {}
 	};
 
 	const handleChange = (event) => {
@@ -108,6 +99,7 @@ const EditProduct = ({ show, onHide, id, refreshList }) => {
 								<Col sm='10'>
 									<img
 										src={process.env.REACT_APP_API_URL + prod.image}
+										alt={prod.title}
 										style={{
 											maxHeight: '300px',
 											width: '100%',
@@ -131,7 +123,7 @@ const EditProduct = ({ show, onHide, id, refreshList }) => {
 						<Button variant='outline-danger' onClick={onHide}>
 							Закрити
 						</Button>
-						<Button variant='outline-success' onClick={addProduct}>
+						<Button variant='outline-success' onClick={updProduct}>
 							Обновити
 						</Button>
 					</Modal.Footer>

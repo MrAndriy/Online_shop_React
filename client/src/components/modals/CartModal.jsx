@@ -27,34 +27,28 @@ const CartModal = ({ show, onHide, user }) => {
 		onHide(true);
 	};
 
-	const sendOrder = () => {
-		const userName = name;
-		const userEmail = email;
+	const sendOrder = async () => {
+		try {
+			const userName = name;
+			const userEmail = email;
 
-		const formData = {
-			cartItems: cart.items,
-		};
-		if (!user) {
-			formData.customer = {
-				name: userName,
-				email: userEmail,
+			const formData = {
+				cartItems: cart.items,
 			};
-			basketService
-				.makeOrderNotAuth(formData)
-				.then(({ data }) => {
-					clearCart();
-					alert(`Your order #${data._id} confirmed`);
-				})
-				.catch((e) => console.log(e));
-		} else {
-			basketService
-				.makeOrderAuth(formData)
-				.then(({ data }) => {
-					clearCart();
-					addToast(`Your order #${data._id} confirmed`);
-				})
-				.catch((e) => console.log(e));
-		}
+			if (!user) {
+				formData.customer = {
+					name: userName,
+					email: userEmail,
+				};
+				const order = await basketService.makeOrderNotAuth(formData);
+				clearCart();
+				addToast(`Your order #${order.data._id} confirmed`);
+			} else {
+				const orderAuth = await basketService.makeOrderAuth(formData);
+				clearCart();
+				addToast(`Your order #${orderAuth.data._id} confirmed`);
+			}
+		} catch (error) {}
 	};
 
 	return (

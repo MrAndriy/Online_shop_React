@@ -25,7 +25,6 @@ const AdminPage = observer(() => {
 				setProducts(response.data);
 			})
 			.catch((e) => {
-				console.log(e);
 			});
 	};
 
@@ -44,11 +43,9 @@ const AdminPage = observer(() => {
 		productsService
 			.deleteAll()
 			.then((response) => {
-				console.log(response.data);
 				refreshList();
 			})
 			.catch((e) => {
-				console.log(e);
 			});
 	};
 
@@ -59,7 +56,6 @@ const AdminPage = observer(() => {
 				setProducts(response.data);
 			})
 			.catch((e) => {
-				console.log(e);
 			});
 	};
 

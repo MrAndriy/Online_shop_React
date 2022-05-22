@@ -1,5 +1,4 @@
 import { makeAutoObservable } from 'mobx';
-import { useToastContext } from '../hook/useToastContext';
 
 export default class Basket {
 	constructor() {
@@ -19,7 +18,7 @@ export default class Basket {
 		if (this._items === undefined) {
 			return false;
 		}
-		return this._items.filter((item) => item.id == id).length > 0;
+		return this._items.filter((item) => item.id === id).length > 0;
 	}
 
 	addToBasket = (product) => {
@@ -84,10 +83,6 @@ export default class Basket {
 		let newCart = this._items.filter((prod) => prod.id !== product.id);
 		this.setItems(newCart);
 		storage.saveCart(this._items);
-	}
-
-	makeOrder() {
-		console.log('click');
 	}
 }
 
