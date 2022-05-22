@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { useRoutes } from './routes/routes';
+import { Router } from './routes/Router';
 import ProductStore from './store/ProductStore';
 import Basket from './store/BasketStore';
 import NavBar from './components/Navbar/Navbar';
@@ -15,7 +15,7 @@ const App = () => {
 	const { token, login, logout, userId, ready } = useAuth();
 	const isAuthenticated = !!token;
 	const Admin = useIsAdmin(token);
-	const routes = useRoutes(isAuthenticated, Admin);
+	const routes = Router(isAuthenticated, Admin);
 
 	if (!ready) {
 		return (
