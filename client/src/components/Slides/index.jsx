@@ -1,11 +1,10 @@
 import React from 'react';
 import { Carousel } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { PRODUCTS_ROUTE } from '../../utils/consts';
+import { PRODUCTS_ROUTE, slidesInterval } from '../../utils/consts';
 
 const Slides = ({ products, homeSlides, isNavigated }) => {
 	const navigate = useNavigate();
-	const interval = 3000;
 
 	const navigatePage = (item) => {
 		if (isNavigated) {
@@ -41,7 +40,7 @@ const Slides = ({ products, homeSlides, isNavigated }) => {
 					<Carousel.Item
 						onClick={() => navigatePage(item)}
 						key={item.id}
-						interval={interval}
+						interval={slidesInterval}
 						style={{ cursor: 'pointer', maxHeight: 500, marginBottom: 50 }}
 					>
 						<img
