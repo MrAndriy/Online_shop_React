@@ -1,18 +1,17 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Context } from '../App';
-import { useIsAdmin } from '../hook/useIsAdmin';
+import { useAPI } from '../context/apiContext';
 import { findUser } from '../http/userAPI';
 import basketService from '../services/basket.service';
 
 const OrderInfo = () => {
+	const { id } = useParams();
+	const [order, setOrder] = useState(null);
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
-	const { token } = useContext(Context);
-	const isAdmin = useIsAdmin(token);
-	const [order, setOrder] = useState(null);
-	const { id } = useParams();
+	const { isAdmin } = useAPI();
+
 	const navigate = useNavigate();
 
 	const goBack = () => navigate(-1);
@@ -21,25 +20,31 @@ const OrderInfo = () => {
 
 	useEffect(() => {
 		try {
-			basketService.getOneOrder(id).then(({ data }) => {
-				let customer = data.customer ? data.customer : null;
-				let owner = customer === null ? data.owner : null;
-				if (customer) {
-					setEmail(customer.email);
-					setName(customer.name);
+			async function fetch() {
+				const fetchedOreder = await basketService.getOneOrder(id);
+				if (isAdmin) {
+					let customer = fetchedOreder.data.customer
+						? fetchedOreder.data.customer
+						: null;
+					let owner = customer === null ? fetchedOreder.data.owner : null;
+					if (customer) {
+						setEmail(customer.email);
+						setName(customer.name);
+					}
+					if (owner) {
+						const user = await findUser(owner);
+						setEmail(user.email);
+						setName(user.fullname);
+					}
 				}
-				if (owner) {
-					findUser(owner).then((data) => {
-						setEmail(data.email);
-						setName(data.fullname);
-					});
-				}
-				setOrder(data);
-			});
-		} catch (e) {}
-	}, [id]);
+				setOrder(fetchedOreder.data);
+			}
 
-	if (order !== null) {
+			fetch();
+		} catch (e) {}
+	}, [id, isAdmin]);
+
+	if (!!order) {
 		order.cartItems.map((price) => (totalAll += Number(price.total)));
 	}
 

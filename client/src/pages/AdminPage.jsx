@@ -3,9 +3,8 @@ import CreateProduct from '../components/modals/CreateProduct';
 import EditProduct from '../components/modals/EditProduct';
 import productsService from '../services/products.service';
 import { Button } from 'react-bootstrap';
-import { observer } from 'mobx-react-lite';
 
-const AdminPage = observer(() => {
+const AdminPage = () => {
 	const [products, setProducts] = useState([]);
 	const [currentProduct, setCurrentProduct] = useState(null);
 	const [currentId, setCurrentId] = useState(-1);
@@ -24,8 +23,7 @@ const AdminPage = observer(() => {
 			.then((response) => {
 				setProducts(response.data);
 			})
-			.catch((e) => {
-			});
+			.catch((e) => {});
 	};
 
 	const refreshList = () => {
@@ -45,8 +43,7 @@ const AdminPage = observer(() => {
 			.then((response) => {
 				refreshList();
 			})
-			.catch((e) => {
-			});
+			.catch((e) => {});
 	};
 
 	const searchTitlee = () => {
@@ -55,8 +52,7 @@ const AdminPage = observer(() => {
 			.then((response) => {
 				setProducts(response.data);
 			})
-			.catch((e) => {
-			});
+			.catch((e) => {});
 	};
 
 	return (
@@ -171,6 +167,6 @@ const AdminPage = observer(() => {
 			/>
 		</div>
 	);
-});
+};
 
 export default AdminPage;
