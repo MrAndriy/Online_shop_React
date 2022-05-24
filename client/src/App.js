@@ -18,7 +18,9 @@ const App = () => {
 	return (
 		<BrowserRouter>
 			<NavBar />
-			<div className='container'>{<Router />}</div>
+			<div className='container'>
+				<Router />
+			</div>
 		</BrowserRouter>
 	);
 };
