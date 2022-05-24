@@ -1,25 +1,32 @@
 import { $authHost, $host } from './index';
 
 export const registration = async ({ email, password, fullname }) => {
-	const { data } = await $host.post('api/user/registration', {
-		email,
-		password,
-		fullname,
-	});
-	return data.token;
+	try {
+		const { data } = await $host.post('api/user/registration', {
+			email,
+			password,
+			fullname,
+		});
+		return data.token;
+	} catch (error) {
+		return error;
+	}
 };
 
 export const login = async ({ email, password }) => {
-	const { data } = await $host.post('api/user/login', { email, password });
-	return data.token;
-};
-
-export const check = async () => {
-	const { data } = await $authHost.get('api/user/auth');
-	return data.token;
+	try {
+		const { data } = await $host.post('api/user/login', { email, password });
+		return data.token;
+	} catch (error) {
+		return error;
+	}
 };
 
 export const findUser = async (id) => {
-	const { data } = await $authHost.get(`api/user/find/${id}`);
-	return data;
+	try {
+		const { data } = await $authHost.get(`api/user/find/${id}`);
+		return data;
+	} catch (error) {
+		return error;
+	}
 };
