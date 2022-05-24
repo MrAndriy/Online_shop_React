@@ -1,19 +1,18 @@
 import { useNavigate, Link } from 'react-router-dom';
-import { BASKET_ROUTE, HOME_ROUTE, LOGIN_ROUTE } from '../consts/consts';
+import { HOME_ROUTE, LOGIN_ROUTE } from '../consts/consts';
 import { MdLogout } from 'react-icons/md';
-import { useContext } from 'react';
-import { Context } from '../App';
+import { useAPI } from '../context/apiContext';
 
-const AuthStatus = ({ user }) => {
-	const auth = useContext(Context);
+const AuthStatus = () => {
+	const { logout, isAuthenticated, user } = useAPI();
 	let navigate = useNavigate();
 
 	const logOut = () => {
-		auth.logout();
+		logout();
 		navigate(HOME_ROUTE);
 	};
 
-	if (!auth.isAuthenticated) {
+	if (!isAuthenticated) {
 		return (
 			<div>
 				<p>

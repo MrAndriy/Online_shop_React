@@ -2,9 +2,11 @@ import React from 'react';
 import { Carousel } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { PRODUCTS_ROUTE, slidesInterval } from '../../consts/consts';
+import { useAPI } from '../../context/apiContext';
 
-const Slides = ({ products, homeSlides, isNavigated }) => {
+const Slides = ({ homeSlides, isNavigated }) => {
 	const navigate = useNavigate();
+	const { products } = useAPI();
 
 	const navigatePage = (item) => {
 		if (isNavigated) {

@@ -1,20 +1,18 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useNavigate, useLocation, NavLink } from 'react-router-dom';
-import { observer } from 'mobx-react-lite';
 import { Container, Card, Form, Row, Button } from 'react-bootstrap';
 import { HOME_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE } from '../consts/consts';
 import { login, registration } from '../http/userAPI';
-import { Context } from '../App';
 import { useToastContext } from '../hook/useToastContext';
-import jwt_decode from 'jwt-decode';
+import { useAPI } from '../context/apiContext';
 
-const Auth = observer(() => {
+const Auth = () => {
 	const initStateForm = {
 		email: '',
 		password: '',
 		fullname: '',
 	};
-	const auth = useContext(Context);
+	const auth = useAPI();
 	const [form, setForm] = useState(initStateForm);
 	const [formErrors, setFormErrors] = useState({});
 	const navigate = useNavigate();
@@ -57,13 +55,11 @@ const Auth = observer(() => {
 			if (isLogin) {
 				data = await login({ ...form });
 				auth.login(data);
-				let user = jwt_decode(data);
-				addToast(`Welcome ${user.fullname} to Stickerz Shop`);
+				addToast(`Welcome to Stickerz Shop`);
 			} else {
 				data = await registration({ ...form });
 				auth.login(data);
-				let user = jwt_decode(data);
-				addToast(`Registration is success ${user.fullname} in Stickerz Shop`);
+				addToast(`Registration is success  in Stickerz Shop`);
 			}
 			navigate(HOME_ROUTE);
 		} catch (e) {
@@ -124,6 +120,6 @@ const Auth = observer(() => {
 			</Card>
 		</Container>
 	);
-});
+};
 
 export default Auth;

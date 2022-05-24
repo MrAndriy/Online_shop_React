@@ -1,14 +1,14 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Modal, Form, Row, Col, Button } from 'react-bootstrap';
-import { Context } from '../../App';
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { TiDeleteOutline } from 'react-icons/ti';
 import basketService from '../../services/basket.service';
 import { storage } from '../../store/BasketStore';
 import { useToastContext } from '../../hook/useToastContext';
+import { useAPI } from '../../context/apiContext';
 
-const CartModal = ({ show, onHide, user }) => {
-	const { cart } = useContext(Context);
+const CartModal = ({ show, onHide }) => {
+	const { cart, user } = useAPI();
 	const [prices, setPrices] = useState(0);
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
@@ -91,7 +91,7 @@ const CartModal = ({ show, onHide, user }) => {
 				))}
 				<h2>Total {prices} UAH</h2>
 
-				{user === null && (
+				{!user && (
 					<>
 						<hr />
 						<Form.Group as={Row} className='mb-3'>

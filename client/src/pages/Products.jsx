@@ -1,23 +1,16 @@
-import { useContext, useEffect } from 'react';
-import { Context } from '../App';
 import { Row, Col, Card, Spinner } from 'react-bootstrap';
 import { BiShoppingBag } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import { PRODUCTS_ROUTE } from '../consts/consts';
-import productsService from '../services/products.service';
-import { observer } from 'mobx-react-lite';
+import { useAPI } from '../context/apiContext';
 
-const Products = observer(() => {
+const Products = () => {
 	const navigate = useNavigate();
-	const { products, cart } = useContext(Context);
+	const { products, cart } = useAPI();
 
-	useEffect(() => {
-		productsService.getAll().then(({ data }) => products.setProducts(data));
-	}, [products]);
-
-	return !!products.products.length ? (
+	return products.length > 0 ? (
 		<Row xs={2} md={4} className='g-4'>
-			{products.products.map((product) => (
+			{products.map((product) => (
 				<Col key={product.id}>
 					<Card style={{ height: 450 }}>
 						<Card.Img
@@ -62,6 +55,6 @@ const Products = observer(() => {
 	) : (
 		<Spinner animation='border' role='status' />
 	);
-});
+};
 
 export default Products;
