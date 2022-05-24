@@ -4,7 +4,7 @@ import Slides from '../components/Slides';
 const Home = () => {
 	return (
 		<div>
-			<Slides homeSlides={true} isNavigated={true} />
+			<Slides homeSlides isNavigated />
 		</div>
 	);
 };
